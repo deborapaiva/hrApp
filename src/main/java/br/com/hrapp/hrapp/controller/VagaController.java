@@ -46,11 +46,11 @@ public class VagaController {
         return vagaService.atualizarVaga(id);
     }
 
-    // Excluir vaga
+    // EXCLUIR VAGA
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletarVaga(@PathVariable Long id) {
         vagaService.deletarVaga(id);
-        return ResponseEntity.noContent().build(); // Retorna 204 No Content
+        return ResponseEntity.noContent().build();
     }
 
 }

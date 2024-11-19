@@ -12,5 +12,5 @@ public interface CandidatoRepository extends JpaRepository<Candidato, Long> {
 	Candidato findByCpf(String cpf);
 	List<Candidato>findByNomeCompleto(String nomeCompleto);
 	
-	Iterable<Candidato>findByVaga(Vaga vaga);
+	Iterable<Candidato>findByVagas(Vaga vaga);
 }

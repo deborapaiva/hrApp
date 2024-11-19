@@ -1,7 +1,6 @@
 package br.com.hrapp.hrapp.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import br.com.hrapp.hrapp.models.Vaga;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.hrapp.hrapp.models.Candidato;
-import br.com.hrapp.hrapp.models.Candidatura;
 import br.com.hrapp.hrapp.service.CandidatoService;
 
 @RestController
@@ -20,7 +18,7 @@ public class CandidatoController {
     private CandidatoService candidatoService;
     private Object candidatoRepository;
 
-    //CADASTRAR
+    //CADASTRAR CANDIDATO
     @PostMapping("/cadastrar")
     public Candidato cadastrarCandidato(@RequestBody Candidato candidato) {
         return candidatoService.cadastrarCandidato(candidato);
@@ -35,14 +33,10 @@ public class CandidatoController {
     //BUSCAR TODOS CANDIDATOS
     @GetMapping("/todos")
     public List<Candidato> buscarTodosCandidatos() {
+
         return candidatoService.buscarTodosCandidatos();
     }
-    
-    //CADASTRAR CANDIDATOS NAS VAGAS
-    @PostMapping("/cadastrar/vaga/{vagaId}")
-    public Candidato cadastrarCandidatoEmVaga(@RequestBody Candidato candidato, @PathVariable Long vagaId) {
-        return candidatoService.cadastrarCandidatoEmVaga(candidato, vagaId);
-    }
+
 
     // DELETAR POR CPF
     @DeleteMapping("/delete/{cpf}")
@@ -51,5 +45,20 @@ public class CandidatoController {
         return ResponseEntity.noContent().build();
     }
 
+    //ADICIONAR CANDIDATO EXISTENTE A VAGA EXISTENTE
+    @PostMapping("/{candidatoId}/vaga/{vagaId}")
+    public ResponseEntity<Candidato> associarCandidatoAVaga(@PathVariable Long candidatoId, @PathVariable Long vagaId) {
+        Candidato candidato = candidatoService.associarCandidatoAVaga(candidatoId, vagaId);
+        return ResponseEntity.ok(candidato);
+    }
+
+    //BUSCAR POR CANDIDATO POR VAGA
+    @GetMapping("/vaga/{id}")
+    public ResponseEntity<List<Candidato>> buscarPorVaga(@PathVariable Long id) {
+        Vaga vaga = new Vaga();
+        vaga.setId(id);
+        Iterable<Candidato> candidatos = candidatoService.buscarCandidatosPorVaga(vaga);
+        return ResponseEntity.ok((List<Candidato>) candidatos);
+    }
 
 }

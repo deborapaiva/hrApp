@@ -1,40 +1,63 @@
 package br.com.hrapp.hrapp.models;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Vaga {
-		
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "vaga_id")
 	private Long id;
-	
+
 	@NotNull
 	private String titulo;
-	
+
 	@NotNull
 	private BigDecimal salario;
-	
+
 	@NotNull
 	private String status;
-	
+
 	@NotNull
 	private String descricao;
-	
-	//REFERÊNCIA PARA CANDIDATO
+
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
-			name = "tb_vaga_candidato",
+			name = "tb_candidato_vaga",
 			joinColumns = @JoinColumn(name = "vaga_id"),
 			inverseJoinColumns = @JoinColumn(name = "candidato_id")
 	)
-	private List<Candidato> candidatos;
+	private Set<Candidato> candidatos;
 
+	// Construtor padrão
+	public Vaga() {
+		this.candidatos = null;  // Inicializa candidatos como null ou um Set vazio
+	}
+
+	// Construtor com parâmetros, usado pelo Jackson
+	@JsonCreator
+	public Vaga(
+			@JsonProperty("titulo") String titulo,
+			@JsonProperty("salario") BigDecimal salario,
+			@JsonProperty("status") String status,
+			@JsonProperty("descricao") String descricao,
+			@JsonProperty("candidatos") Set<Candidato> candidatos
+	) {
+		this.titulo = titulo;
+		this.salario = salario;
+		this.status = status;
+		this.descricao = descricao;
+		this.candidatos = candidatos;
+	}
+
+	// Getters e Setters
 	public Long getId() {
 		return id;
 	}
@@ -67,14 +90,6 @@ public class Vaga {
 		this.status = status;
 	}
 
-	public List<Candidato> getCandidatos() {
-		return candidatos;
-	}
-
-	public void setCandidatos(List<Candidato> candidatos) {
-		this.candidatos = candidatos;
-	}
-
 	public String getDescricao() {
 		return descricao;
 	}
@@ -83,6 +98,11 @@ public class Vaga {
 		this.descricao = descricao;
 	}
 
-	
-	
+	public Set<Candidato> getCandidatos() {
+		return candidatos;
+	}
+
+	public void setCandidatos(Set<Candidato> candidatos) {
+		this.candidatos = candidatos;
+	}
 }

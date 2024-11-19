@@ -8,7 +8,8 @@ import java.util.UUID;
 public class Candidatura {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    @Column(name = "candidatura_id")
+	private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "candidato_id")

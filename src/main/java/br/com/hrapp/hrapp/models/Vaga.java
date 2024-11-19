@@ -3,21 +3,16 @@ package br.com.hrapp.hrapp.models;
 import java.math.BigDecimal;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.UUID;
 
 @Entity
 public class Vaga {
 		
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private UUID id;
+	@Column(name = "vaga_id")
+	private Long id;
 	
 	@NotNull
 	private String titulo;
@@ -32,14 +27,19 @@ public class Vaga {
 	private String descricao;
 	
 	//REFERÊNCIA PARA CANDIDATO
-	@OneToMany(mappedBy = "vaga", cascade = CascadeType.REMOVE)
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "tb_vaga_candidato",
+			joinColumns = @JoinColumn(name = "vaga_id"),
+			inverseJoinColumns = @JoinColumn(name = "candidato_id")
+	)
 	private List<Candidato> candidatos;
 
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

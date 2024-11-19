@@ -10,13 +10,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.UUID;
 
 @Entity
 public class Vaga {
 		
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private UUID id;
 	
 	@NotNull
 	private String titulo;
@@ -34,11 +35,11 @@ public class Vaga {
 	@OneToMany(mappedBy = "vaga", cascade = CascadeType.REMOVE)
 	private List<Candidato> candidatos;
 
-	public long getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 

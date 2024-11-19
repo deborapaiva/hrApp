@@ -2,11 +2,13 @@ package br.com.hrapp.hrapp.models;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 public class Candidatura {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "candidato_id")
@@ -16,11 +18,11 @@ public class Candidatura {
     @JoinColumn(name = "vaga_id")
     private Vaga vaga;
 
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 

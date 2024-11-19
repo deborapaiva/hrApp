@@ -1,4 +1,4 @@
-package br.com.hrapp.hrapp;
+package br.com.hrapp.hrapp.config;
 
 import javax.sql.DataSource;
 

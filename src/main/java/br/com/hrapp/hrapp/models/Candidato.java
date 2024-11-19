@@ -8,13 +8,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.UUID;
 
 @Entity
 @Table(name="Candidato")
 public class Candidato {
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		private Long id;
+		private UUID id;
 		
 		    @NotNull(message = "Nome completo não pode ser nulo")
 		    private String nomeCompleto;
@@ -37,15 +38,15 @@ public class Candidato {
 		@JoinColumn(name ="vaga_id")
 		private Vaga vaga;
 
-		public Long getId() {
-			return id;
-		}
+	public UUID getId() {
+		return id;
+	}
 
-		public void setId(Long id) {
-			this.id = id;
-		}
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
-		public String getNomeCompleto() {
+	public String getNomeCompleto() {
 			return nomeCompleto;
 		}
 

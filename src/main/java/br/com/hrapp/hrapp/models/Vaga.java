@@ -1,14 +1,18 @@
 package br.com.hrapp.hrapp.models;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "Vaga")
 public class Vaga {
 
 	@Id
@@ -28,28 +32,33 @@ public class Vaga {
 	@NotNull
 	private String descricao;
 
+	// Construtor vazio obrigatório para o Hibernate
+	public Vaga() {
+	}
+
+	// Construtor personalizado
+	public Vaga(String titulo, String descricao) {
+		this.titulo = titulo;
+		this.descricao = descricao;
+	}
+
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "tb_candidato_vaga",
 			joinColumns = @JoinColumn(name = "vaga_id"),
 			inverseJoinColumns = @JoinColumn(name = "candidato_id")
 	)
-	private Set<Candidato> candidatos;
+	@JsonBackReference // Este lado será ignorado na serialização
+	private List<Candidato> candidatos;
 
-	// Construtor padrão
-	public Vaga() {
-		this.candidatos = null;  // Inicializa candidatos como null ou um Set vazio
-	}
-
-	// Construtor com parâmetros, usado pelo Jackson
 	@JsonCreator
-	public Vaga(
+	public <candidatos> Vaga(
 			@JsonProperty("titulo") String titulo,
 			@JsonProperty("salario") BigDecimal salario,
 			@JsonProperty("status") String status,
 			@JsonProperty("descricao") String descricao,
-			@JsonProperty("candidatos") Set<Candidato> candidatos
-	) {
+			@JsonProperty("candidato") List<Candidato> candidatos
+			) {
 		this.titulo = titulo;
 		this.salario = salario;
 		this.status = status;
@@ -98,11 +107,11 @@ public class Vaga {
 		this.descricao = descricao;
 	}
 
-	public Set<Candidato> getCandidatos() {
+	public List<Candidato> getCandidatos() {
 		return candidatos;
 	}
 
-	public void setCandidatos(Set<Candidato> candidatos) {
+	public void setCandidatos(List<Candidato> candidatos) {
 		this.candidatos = candidatos;
 	}
 }

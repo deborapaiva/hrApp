@@ -1,9 +1,10 @@
 package br.com.hrapp.hrapp.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 	@Entity
@@ -31,13 +32,14 @@ import java.util.Set;
 
 		// RELAÇÃO MANY TO MANY COM VAGA
 		@ManyToMany(mappedBy = "candidatos")
-		private Set<Vaga> vagas; // Relacionamento com a Vaga, lado inverso
+		@JsonManagedReference // Este lado será serializado
+		private List<Vaga> vagas;
 
-		public Set<Vaga> getVagas() {
+		public List<Vaga> getVagas() {
 			return vagas;
 		}
 
-		public void setVagas(Set<Vaga> vagas) {
+		public void setVagas(List<Vaga> vagas) {
 			this.vagas = vagas;
 		}
 

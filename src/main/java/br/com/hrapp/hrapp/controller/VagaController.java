@@ -42,8 +42,10 @@ public class VagaController {
 
     // ATUALIZAR VAGA
     @PutMapping("/{id}")
-    public Vaga atualizarVaga(@PathVariable Long id, @RequestBody Vaga vagaAtualizada) {
-        return vagaService.atualizarVaga(id);
+    public Vaga atualizarVaga(
+            @PathVariable Long id,
+            @RequestBody Vaga vagaAtualizada) {
+        return vagaService.atualizarVaga(id, vagaAtualizada);
     }
 
     // EXCLUIR VAGA

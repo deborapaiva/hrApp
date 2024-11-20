@@ -37,7 +37,6 @@ public class CandidatoController {
         return candidatoService.buscarTodosCandidatos();
     }
 
-
     // DELETAR POR CPF
     @DeleteMapping("/delete/{cpf}")
     public ResponseEntity<Void> deletarCandidato(@PathVariable String cpf) {
@@ -46,19 +45,11 @@ public class CandidatoController {
     }
 
     //ADICIONAR CANDIDATO EXISTENTE A VAGA EXISTENTE
-    @PostMapping("/{candidatoId}/vaga/{vagaId}")
-    public ResponseEntity<Candidato> associarCandidatoAVaga(@PathVariable Long candidatoId, @PathVariable Long vagaId) {
+    @PostMapping("/inscricao")
+    public ResponseEntity<Candidato> associarCandidatoAVaga(
+            @RequestParam Long candidatoId,
+            @RequestParam Long vagaId) {
         Candidato candidato = candidatoService.associarCandidatoAVaga(candidatoId, vagaId);
         return ResponseEntity.ok(candidato);
     }
-
-    //BUSCAR POR CANDIDATO POR VAGA
-    @GetMapping("/vaga/{id}")
-    public ResponseEntity<List<Candidato>> buscarPorVaga(@PathVariable Long id) {
-        Vaga vaga = new Vaga();
-        vaga.setId(id);
-        Iterable<Candidato> candidatos = candidatoService.buscarCandidatosPorVaga(vaga);
-        return ResponseEntity.ok((List<Candidato>) candidatos);
-    }
-
 }

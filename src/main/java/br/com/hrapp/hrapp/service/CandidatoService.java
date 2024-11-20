@@ -31,11 +31,7 @@ public class CandidatoService {
 	
 	//BUSCAR POR CPF
 	public Candidato buscarCandidatoPorCPF(String cpf) {
-	    return candidatoRepository.findByCpf(cpf);
-	    }
-
-	public List<Candidato> buscarTodosCandidatos() {
-		return candidatoRepository.findAll();
+		return candidatoRepository.findByCpf(cpf);
 	}
 
 	// DELETAR POR CPF
@@ -58,9 +54,18 @@ public class CandidatoService {
 		Vaga vaga = vagaRepository.findById(vagaId)
 				.orElseThrow(() -> new RuntimeException("Vaga não encontrada"));
 
-		candidato.getVagas().add(vaga);
+		// Adiciona a vaga à lista de vagas do candidato
+		List<Vaga> vagasDoCandidato = candidato.getVagas();
+		vagasDoCandidato.add(vaga);
+		candidato.setVagas(vagasDoCandidato);
 
-		return candidatoRepository.save(candidato);
+		// Também adiciona o candidato à lista de candidatos da vaga
+		List<Candidato> candidatosDaVaga = vaga.getCandidatos();
+		candidatosDaVaga.add(candidato);
+		vaga.setCandidatos(candidatosDaVaga);
+
+		vagaRepository.save(vaga); // Atualiza a vaga
+		return candidatoRepository.save(candidato); // Atualiza o candidato
 	}
 
 	//BUSCAR CANDIDATO POR VAGA
@@ -69,6 +74,8 @@ public class CandidatoService {
 	}
 
 
-
+	public List<Candidato> buscarTodosCandidatos() {
+		return candidatoRepository.findAll();
+	}
 }
 

@@ -27,18 +27,18 @@ public class Role {
         this.name = name;
     }
 
-    public enum Values {
-        ADMIN(1L),
-        BASIC(2L);
+    public enum UserRole {
+        ADMIN("admin"),
+        BASIC("user");
 
-        long roleId;
+        private String role;
 
-        Values(long roleId){
-           this.roleId = roleId;
+        UserRole(String role){
+            this.role = role;
         }
 
-        public long getRoleId(){
-            return roleId;
+        public String getRole(){
+            return role;
         }
     }
 }

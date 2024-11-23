@@ -29,6 +29,16 @@ public class User implements UserDetails {
 
     private Role.UserRole role;
 
+    // Construtor padrão
+    public User() { }
+
+    // Construtor com parâmetros
+    public User(String username, String password, Role.UserRole role){
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.role == Role.UserRole.ADMIN)

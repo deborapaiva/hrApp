@@ -19,31 +19,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(csrf -> csrf.disable()) //Vulnerabilidade, em produção retirar
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/registro").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/vaga/cadastrar").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .build();
 
+    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.cors().and()
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable()) //Vulnerabilidade, em produção retirar
-                .and()
-                .addFilter(new JWTAuthentication(authenticationManager))
-                .addFilterBefore(new JWTAuthorization(authenticationManager), UsernamePasswordAuthenticationFilter.class)
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return http.build();
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
 }

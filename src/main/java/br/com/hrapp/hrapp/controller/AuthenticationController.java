@@ -1,16 +1,17 @@
 package br.com.hrapp.hrapp.controller;
 
+import br.com.hrapp.hrapp.models.AuthResponseDTO;
 import br.com.hrapp.hrapp.models.AutheticationDTO;
 import br.com.hrapp.hrapp.models.RegistroDTO;
 import br.com.hrapp.hrapp.models.User;
 import br.com.hrapp.hrapp.repository.UserRepository;
+import br.com.hrapp.hrapp.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,8 @@ public class AuthenticationController {
     private UserRepository repository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TokenService tokenService;
 
 //LOGIN DOS USUÁRIOS CRIADOS
     @PostMapping("/login")
@@ -35,7 +38,9 @@ public class AuthenticationController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
         var auth = this. authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new AuthResponseDTO(token));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed: " + e.getMessage());
         }

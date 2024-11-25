@@ -1,41 +1,52 @@
 package br.com.hrapp.hrapp.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name="Candidato")
-public class Candidato {
+import java.util.List;
+
+	@NoArgsConstructor // Construtor sem argumentos
+	@AllArgsConstructor // Construtor com argumentos
+	@Entity
+	@Data
+	@Table(name="Candidato")
+	public class Candidato {
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		@Column(name = "candidato_id")
 		private Long id;
-		
-		    @NotNull(message = "Nome completo não pode ser nulo")
-		    private String nomeCompleto;
 
-		    @NotNull(message = "Idade não pode ser nula")
-		    private Integer idade;
+		@NotNull(message = "Nome completo não pode ser nulo")
+		private String nomeCompleto;
 
-		    @NotNull(message = "CPF não pode ser nulo")
-		    private String cpf;
+		@NotNull(message = "Idade não pode ser nula")
+		private Integer idade;
 
-		    @NotNull(message = "Email não pode ser nulo")
-		    private String email;
+		@NotNull(message = "CPF não pode ser nulo")
+		private String cpf;
 
-		    @NotNull(message = "Telefone não pode ser nulo")
-		    private String telefone;
-		
-		    
-		    //REFERÊNCIA PARA VAGA
-		@ManyToOne
-		@JoinColumn(name ="vaga_id")
-		private Vaga vaga;
+		@NotNull(message = "Email não pode ser nulo")
+		private String email;
+
+		@NotNull(message = "Telefone não pode ser nulo")
+		private String telefone;
+
+		// RELAÇÃO MANY TO MANY COM VAGA
+		@ManyToMany(mappedBy = "candidatos")
+		@JsonManagedReference // Este lado será serializado
+		private List<Vaga> vagas;
+
+		public List<Vaga> getVagas() {
+			return vagas;
+		}
+
+		public void setVagas(List<Vaga> vagas) {
+			this.vagas = vagas;
+		}
 
 		public Long getId() {
 			return id;
@@ -45,53 +56,47 @@ public class Candidato {
 			this.id = id;
 		}
 
-		public String getNomeCompleto() {
+		public @NotNull(message = "Nome completo não pode ser nulo") String getNomeCompleto() {
 			return nomeCompleto;
 		}
 
-		public void setNomeCompleto(String nomeCompleto) {
+		public void setNomeCompleto(@NotNull(message = "Nome completo não pode ser nulo") String nomeCompleto) {
 			this.nomeCompleto = nomeCompleto;
 		}
 
-		public Integer getIdade() {
+		public @NotNull(message = "Idade não pode ser nula") Integer getIdade() {
 			return idade;
 		}
 
-		public void setIdade(Integer idade) {
+		public void setIdade(@NotNull(message = "Idade não pode ser nula") Integer idade) {
 			this.idade = idade;
 		}
 
-		public String getCpf() {
+		public @NotNull(message = "CPF não pode ser nulo") String getCpf() {
 			return cpf;
 		}
 
-		public void setCpf(String cpf) {
+		public void setCpf(@NotNull(message = "CPF não pode ser nulo") String cpf) {
 			this.cpf = cpf;
 		}
 
-		public String getEmail() {
+		public @NotNull(message = "Email não pode ser nulo") String getEmail() {
 			return email;
 		}
 
-		public void setEmail(String email) {
+		public void setEmail(@NotNull(message = "Email não pode ser nulo") String email) {
 			this.email = email;
 		}
 
-		public String getTelefone() {
+		public @NotNull(message = "Telefone não pode ser nulo") String getTelefone() {
 			return telefone;
 		}
 
-		public void setTelefone(String telefone) {
+		public void setTelefone(@NotNull(message = "Telefone não pode ser nulo") String telefone) {
 			this.telefone = telefone;
 		}
+	}
 
-		public Vaga getVaga() {
-			return vaga;
-		}
 
-		public void setVaga(Vaga vaga) {
-			this.vaga = vaga;
-		}
-}
 
 

@@ -3,85 +3,70 @@ package br.com.hrapp.hrapp.models;
 import java.math.BigDecimal;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "Vaga")
+@Data
 public class Vaga {
-		
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
+	@Column(name = "vaga_id")
+	private Long id;
+
 	@NotNull
 	private String titulo;
-	
+
 	@NotNull
 	private BigDecimal salario;
-	
+
 	@NotNull
 	private String status;
-	
+
 	@NotNull
 	private String descricao;
-	
-	//REFERÊNCIA PARA CANDIDATO
-	@OneToMany(mappedBy = "vaga", cascade = CascadeType.REMOVE)
-	private List<Candidato> candidatos;
 
-	public long getId() {
-		return id;
+	// Construtor vazio obrigatório para o Hibernate
+	public Vaga() {
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getTitulo() {
-		return titulo;
-	}
-
-	public void setTitulo(String titulo) {
+	// Construtor personalizado
+	public Vaga(String titulo, String descricao) {
 		this.titulo = titulo;
-	}
-
-	public BigDecimal getSalario() {
-		return salario;
-	}
-
-	public void setSalario(BigDecimal salario) {
-		this.salario = salario;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public List<Candidato> getCandidatos() {
-		return candidatos;
-	}
-
-	public void setCandidatos(List<Candidato> candidatos) {
-		this.candidatos = candidatos;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
 
-	
-	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "tb_candidato_vaga",
+			joinColumns = @JoinColumn(name = "vaga_id"),
+			inverseJoinColumns = @JoinColumn(name = "candidato_id")
+	)
+	@JsonBackReference // Este lado será ignorado na serialização
+	private List<Candidato> candidatos;
+
+	@JsonCreator
+	public <candidatos> Vaga(
+			@JsonProperty("titulo") String titulo,
+			@JsonProperty("salario") BigDecimal salario,
+			@JsonProperty("status") String status,
+			@JsonProperty("descricao") String descricao,
+			@JsonProperty("candidato") List<Candidato> candidatos
+			) {
+		this.titulo = titulo;
+		this.salario = salario;
+		this.status = status;
+		this.descricao = descricao;
+		this.candidatos = candidatos;
+	}
+
+
 }

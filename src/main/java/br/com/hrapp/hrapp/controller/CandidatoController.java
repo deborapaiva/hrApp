@@ -1,7 +1,6 @@
 package br.com.hrapp.hrapp.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import br.com.hrapp.hrapp.models.Vaga;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.hrapp.hrapp.models.Candidato;
-import br.com.hrapp.hrapp.models.Candidatura;
 import br.com.hrapp.hrapp.service.CandidatoService;
 
 @RestController
@@ -21,7 +19,7 @@ public class CandidatoController {
     private CandidatoService candidatoService;
     private Object candidatoRepository;
 
-    //CADASTRAR
+    //CADASTRAR CANDIDATO
     @PostMapping("/cadastrar")
     @Operation(
             summary = ("Cadastrar candidatos"),
@@ -51,13 +49,8 @@ public class CandidatoController {
             tags={"candidato"}
     )
     public List<Candidato> buscarTodosCandidatos() {
+
         return candidatoService.buscarTodosCandidatos();
-    }
-    
-    //CADASTRAR CANDIDATOS NAS VAGAS
-    @PostMapping("/cadastrar/vaga/{vagaId}")
-    public Candidato cadastrarCandidatoEmVaga(@RequestBody Candidato candidato, @PathVariable Long vagaId) {
-        return candidatoService.cadastrarCandidatoEmVaga(candidato, vagaId);
     }
 
     // DELETAR POR CPF
@@ -72,5 +65,12 @@ public class CandidatoController {
         return ResponseEntity.noContent().build();
     }
 
-
+    //ADICIONAR CANDIDATO EXISTENTE A VAGA EXISTENTE
+    @PostMapping("/inscricao")
+    public ResponseEntity<Candidato> associarCandidatoAVaga(
+            @RequestParam Long candidatoId,
+            @RequestParam Long vagaId) {
+        Candidato candidato = candidatoService.associarCandidatoAVaga(candidatoId, vagaId);
+        return ResponseEntity.ok(candidato);
+    }
 }

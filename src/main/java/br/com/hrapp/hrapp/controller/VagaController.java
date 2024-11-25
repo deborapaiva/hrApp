@@ -69,9 +69,12 @@ public class VagaController {
             summary = ("Atualização de Vaga"),
             description = ("Atualização de Vaga"),
             tags={"vaga"}
-    )
-    public Vaga atualizarVaga(@PathVariable Long id, @RequestBody Vaga vagaAtualizada) {
-        return vagaService.atualizarVaga(id);
+      )
+
+    public Vaga atualizarVaga(
+            @PathVariable Long id,
+            @RequestBody Vaga vagaAtualizada) {
+        return vagaService.atualizarVaga(id, vagaAtualizada);
     }
 
     // EXCLUIR VAGA

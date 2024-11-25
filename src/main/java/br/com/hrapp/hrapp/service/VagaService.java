@@ -27,29 +27,13 @@ public class VagaService {
 	}
 	
 	//BUSCAR POR STATUS
-		public List<Vaga> buscarVagaPorStatus(String status) {
+	public List<Vaga> buscarVagaPorStatus(String status) {
 			return vagaRepository.findByStatus(status);
 		}
 		
 	//BUSCAR POR TODOS
-		public List<Vaga> buscarTodasVagas(){
+	public List<Vaga> buscarTodasVagas(){
 			return vagaRepository.findAll();
-		}
-	
-		//Atualizar
-		public Vaga atualizarVaga(Long id) {
-		    Optional<Vaga> vagaExistente = vagaRepository.findById(id);
-		    
-		    if (vagaExistente.isPresent()) {
-		        Vaga vaga = vagaExistente.get();
-		        vaga.setTitulo(vagaAtualizada.getTitulo());
-		        vaga.setDescricao(vagaAtualizada.getDescricao());
-		        vaga.setSalario(vagaAtualizada.getSalario());
-		        vaga.setStatus(vagaAtualizada.getStatus());
-		        return vagaRepository.save(vaga);
-		    } else {
-		        throw new RuntimeException("Vaga com ID " + id + " não encontrada.");
-		    }
 		}
 
 	// Deletar uma vaga
@@ -63,6 +47,18 @@ public class VagaService {
 		}
 	}
 
+	//ATUALIZAR VAGA
+	public Vaga atualizarVaga(Long id, Vaga vagaAtualizada) {
+		Vaga vagaExistente = vagaRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Vaga com ID " + id + " não encontrada"));
+
+		vagaExistente.setTitulo(vagaAtualizada.getTitulo());
+		vagaExistente.setDescricao(vagaAtualizada.getDescricao());
+		vagaExistente.setSalario(vagaAtualizada.getSalario());
+		vagaExistente.setStatus(vagaAtualizada.getStatus());
+
+		return vagaRepository.save(vagaExistente);
+	}
 }
 
 	

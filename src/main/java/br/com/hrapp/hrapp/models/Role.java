@@ -1,7 +1,11 @@
 package br.com.hrapp.hrapp.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor // Construtor sem argumentos
+@AllArgsConstructor // Construtor com argumentos
 @Entity
 @Table(name="tb_role")
 public class Role {

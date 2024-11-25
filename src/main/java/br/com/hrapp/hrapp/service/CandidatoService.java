@@ -31,6 +31,7 @@ public class CandidatoService {
 	
 	//BUSCAR POR CPF
 	public Candidato buscarCandidatoPorCPF(String cpf) {
+
 		return candidatoRepository.findByCpf(cpf);
 	}
 

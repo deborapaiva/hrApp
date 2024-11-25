@@ -35,7 +35,7 @@ Além disso, o sistema possui funcionalidades de **gerenciamento de usuários** 
 
 ## Estrutura do Projeto
 
-- **src/main/java/com/seuempresa/vagas**:
+- **src/main/java/com/hrApp**:
   - **controller**: Contém os controladores responsáveis pelo gerenciamento de requisições HTTP.
   - **model**: Contém as entidades JPA para mapeamento de dados (usuários, vagas, etc.).
   - **repository**: Contém as interfaces de repositórios para interação com o banco de dados.

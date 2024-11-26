@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Vaga")
+@AllArgsConstructor // Construtor com argumentos
 @Data
 public class Vaga {
 
@@ -50,7 +51,6 @@ public class Vaga {
 			joinColumns = @JoinColumn(name = "vaga_id"),
 			inverseJoinColumns = @JoinColumn(name = "candidato_id")
 	)
-	@JsonBackReference // Este lado será ignorado na serialização
 	private List<Candidato> candidatos;
 
 	@JsonCreator
@@ -58,14 +58,12 @@ public class Vaga {
 			@JsonProperty("titulo") String titulo,
 			@JsonProperty("salario") BigDecimal salario,
 			@JsonProperty("status") String status,
-			@JsonProperty("descricao") String descricao,
-			@JsonProperty("candidato") List<Candidato> candidatos
+			@JsonProperty("descricao") String descricao
 			) {
 		this.titulo = titulo;
 		this.salario = salario;
 		this.status = status;
 		this.descricao = descricao;
-		this.candidatos = candidatos;
 	}
 
 

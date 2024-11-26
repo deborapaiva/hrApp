@@ -6,6 +6,7 @@ import br.com.hrapp.hrapp.models.RegistroDTO;
 import br.com.hrapp.hrapp.models.User;
 import br.com.hrapp.hrapp.repository.UserRepository;
 import br.com.hrapp.hrapp.service.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,11 @@ public class AuthenticationController {
 
 //LOGIN DOS USUÁRIOS CRIADOS
     @PostMapping("/login")
+    @Operation(
+            summary = ("Login"),
+            description = ("Login de USER e ADM"),
+            tags={"auth"}
+    )
     public ResponseEntity<?> login(@RequestBody @Valid AutheticationDTO data){
         try{
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
@@ -48,6 +54,11 @@ public class AuthenticationController {
 
     //CRIAÇÂO DE NOVO USER
     @PostMapping("/registro")
+    @Operation(
+            summary = ("Registro"),
+            description = ("Registro de USER e ADM"),
+            tags={"auth"}
+    )
     public ResponseEntity registro(@RequestBody @Valid RegistroDTO data){
         if(this.repository.findByUsername(data.username()) != null) {
             return ResponseEntity.badRequest().build();

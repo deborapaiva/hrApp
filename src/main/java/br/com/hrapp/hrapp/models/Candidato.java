@@ -1,5 +1,6 @@
 package br.com.hrapp.hrapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -37,64 +38,9 @@ import java.util.List;
 
 		// RELAÇÃO MANY TO MANY COM VAGA
 		@ManyToMany(mappedBy = "candidatos")
-		@JsonManagedReference // Este lado será serializado
+		@JsonIgnore // Ignora a serialização do lado ManyToMany para evitar loops
 		private List<Vaga> vagas;
 
-		public List<Vaga> getVagas() {
-			return vagas;
-		}
-
-		public void setVagas(List<Vaga> vagas) {
-			this.vagas = vagas;
-		}
-
-		public Long getId() {
-			return id;
-		}
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-		public @NotNull(message = "Nome completo não pode ser nulo") String getNomeCompleto() {
-			return nomeCompleto;
-		}
-
-		public void setNomeCompleto(@NotNull(message = "Nome completo não pode ser nulo") String nomeCompleto) {
-			this.nomeCompleto = nomeCompleto;
-		}
-
-		public @NotNull(message = "Idade não pode ser nula") Integer getIdade() {
-			return idade;
-		}
-
-		public void setIdade(@NotNull(message = "Idade não pode ser nula") Integer idade) {
-			this.idade = idade;
-		}
-
-		public @NotNull(message = "CPF não pode ser nulo") String getCpf() {
-			return cpf;
-		}
-
-		public void setCpf(@NotNull(message = "CPF não pode ser nulo") String cpf) {
-			this.cpf = cpf;
-		}
-
-		public @NotNull(message = "Email não pode ser nulo") String getEmail() {
-			return email;
-		}
-
-		public void setEmail(@NotNull(message = "Email não pode ser nulo") String email) {
-			this.email = email;
-		}
-
-		public @NotNull(message = "Telefone não pode ser nulo") String getTelefone() {
-			return telefone;
-		}
-
-		public void setTelefone(@NotNull(message = "Telefone não pode ser nulo") String telefone) {
-			this.telefone = telefone;
-		}
 	}
 
 

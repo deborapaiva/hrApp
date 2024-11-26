@@ -24,7 +24,7 @@ public class VagaController {
     @Operation(
             summary = ("Cadastro de Vagas"),
             description = ("Cadastro das vagas disponíveis pelo RH"),
-            tags={"vaga"}
+            tags={"Vaga"}
     )
     public Vaga cadastraVaga(@RequestBody Vaga vaga) {
         return vagaService.cadastraVaga(vaga);
@@ -35,7 +35,7 @@ public class VagaController {
     @Operation(
             summary = ("Busca de Vagas por Título"),
             description = ("Busca de Vagas por Título"),
-            tags={"vaga"}
+            tags={"Vaga"}
     )
     public List<Vaga> buscarVagaPorTitulo(@PathVariable String titulo) {
         return vagaService.buscarVagaPorTitulo(titulo);
@@ -46,7 +46,7 @@ public class VagaController {
     @Operation(
             summary = ("Busca de Vagas por Status"),
             description = ("Busca de Vagas por Status"),
-            tags={"vaga"}
+            tags={"Vaga"}
     )
     public List<Vaga> buscarVagaPorStatus(@PathVariable String status) {
         return vagaService.buscarVagaPorStatus(status);
@@ -57,7 +57,7 @@ public class VagaController {
     @Operation(
             summary = ("Busca de Todas as Vagas"),
             description = ("Busca de Todas as Vagas"),
-            tags={"vaga"}
+            tags={"Vaga"}
     )
     public List<Vaga> buscarTodasVagas(){
     	return vagaService.buscarTodasVagas();
@@ -68,9 +68,8 @@ public class VagaController {
     @Operation(
             summary = ("Atualização de Vaga"),
             description = ("Atualização de Vaga"),
-            tags={"vaga"}
+            tags={"Vaga"}
       )
-
     public Vaga atualizarVaga(
             @PathVariable Long id,
             @RequestBody Vaga vagaAtualizada) {
@@ -82,7 +81,7 @@ public class VagaController {
     @Operation(
             summary = ("Exclusão de Vaga"),
             description = ("Excluir de Vaga por ID"),
-            tags={"vaga"}
+            tags={"Vaga"}
     )
     public ResponseEntity<Void> deletarVaga(@PathVariable Long id) {
         vagaService.deletarVaga(id);

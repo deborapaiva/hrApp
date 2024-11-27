@@ -2,6 +2,7 @@ package br.com.hrapp.hrapp.controller;
 
 import java.util.List;
 
+import br.com.hrapp.hrapp.DTO.CandidatoDTO;
 import br.com.hrapp.hrapp.models.Vaga;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,17 +20,15 @@ public class CandidatoController {
 
     @Autowired
     private CandidatoService candidatoService;
-    private Object candidatoRepository;
+
 
     //CADASTRAR CANDIDATO
     @PostMapping("/cadastrar")
-    @Operation(
-            summary = ("Cadastrar candidatos"),
-            description = ("Cadastro de candidatos"),
-            tags={"Candidato"}
-    )
-    public Candidato cadastrarCandidato(@RequestBody Candidato candidato) {
-        return candidatoService.cadastrarCandidato(candidato);
+    @Operation(summary = "Cadastrar candidato", description = "Cadastrar um novo candidato")
+    public CandidatoDTO cadastrarCandidato(@RequestBody CandidatoDTO candidatoDTO) {
+        Candidato candidato = candidatoService.converterParaEntidade(candidatoDTO);
+        Candidato candidatoSalvo = candidatoService.cadastrarCandidato(candidato);
+        return candidatoService.converterParaDTO(candidatoSalvo);
     }
 
     // BUSCAR CANDIDATO POR CPF
@@ -45,13 +44,8 @@ public class CandidatoController {
     
     //BUSCAR TODOS CANDIDATOS
     @GetMapping("/todos")
-    @Operation(
-            summary = ("Buscar todos candidato"),
-            description = ("Buscar por todos candidatos cadastrados"),
-            tags={"Candidato"}
-    )
-    public List<Candidato> buscarTodosCandidatos() {
-
+    @Operation(summary = "Buscar todos candidatos", description = "Buscar todos candidatos cadastrados")
+    public List<CandidatoDTO> buscarTodosCandidatos() {
         return candidatoService.buscarTodosCandidatos();
     }
 

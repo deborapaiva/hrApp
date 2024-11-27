@@ -1,9 +1,14 @@
 package br.com.hrapp.hrapp.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.management.JMRuntimeException;
 
+import br.com.hrapp.hrapp.DTO.CandidatoDTO;
+import br.com.hrapp.hrapp.validators.CandidatoValidator;
+import br.com.hrapp.hrapp.validators.VagaValidator;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,39 +26,58 @@ public class CandidatoService {
 	@Autowired
 	private VagaRepository vagaRepository;
 
+	@Autowired
+	private CandidatoValidator candidatoValidator;
+
+	@Autowired
+	private VagaValidator vagaValidator;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    // Converter Candidato para CandidatoDTO
+    public CandidatoDTO converterParaDTO(Candidato candidato) {
+        return modelMapper.map(candidato, CandidatoDTO.class);
+    }
+
+    // Converter CandidatoDTO para Candidato
+    public Candidato converterParaEntidade(CandidatoDTO dto) {
+        return modelMapper.map(dto, Candidato.class);
+    }
+
+    // Buscar todos os candidatos e retornar como DTOs
+    public List<CandidatoDTO> buscarTodosCandidatos() {
+        List<Candidato> candidatos = candidatoRepository.findAll();
+        return candidatos.stream()
+                .map(this::converterParaDTO)
+                .collect(Collectors.toList());
+    }
+
+
 	//CADASTRAR CANDIDATO
 	public Candidato cadastrarCandidato(@Valid Candidato candidato) {
-	    if(candidatoRepository.findByCpf(candidato.getCpf()) != null){
-			throw new IllegalArgumentException("Candidato com o CPF "+ candidato.getCpf() + " já está cadastrado.");
-		}
+		candidatoValidator.validarCpfUnico(candidato.getCpf());
 		return candidatoRepository.save(candidato);
 	}
 	
 	//BUSCAR POR CPF
 	public Candidato buscarCandidatoPorCPF(String cpf) {
-
 		return candidatoRepository.findByCpf(cpf);
 	}
 
 	// DELETAR POR CPF
 	public void deletarCandidato(String cpf) {
+		candidatoValidator.validarCandidatoExistente(cpf);
 		Candidato candidatoExistente = candidatoRepository.findByCpf(cpf);
-
-		if (candidatoExistente != null) {
-			candidatoRepository.delete(candidatoExistente);
-		} else {
-			throw new RuntimeException("Candidato com CPF " + cpf + " não encontrado.");
-		}
+		candidatoRepository.delete(candidatoExistente);
 	}
 
 	//CADASTRAR CANDIDATO NA VAGA
 	public Candidato associarCandidatoAVaga(Long candidatoId, Long vagaId) {
 
-		Candidato candidato = candidatoRepository.findById(candidatoId)
-				.orElseThrow(() -> new RuntimeException("Candidato não encontrado"));
+		Candidato candidato = candidatoValidator.validarCandidatoEObter(candidatoId);
 
-		Vaga vaga = vagaRepository.findById(vagaId)
-				.orElseThrow(() -> new RuntimeException("Vaga não encontrada"));
+		Vaga vaga = vagaValidator.validarVagaEObter(vagaId);
 
 		// Adiciona a vaga à lista de vagas do candidato
 		List<Vaga> vagasDoCandidato = candidato.getVagas();
@@ -74,8 +98,7 @@ public class CandidatoService {
 		return candidatoRepository.findByVagas(vaga);
 	}
 
-
-	public List<Candidato> buscarTodosCandidatos() {
+	public List<Candidato> buscarTodosCandidatosDTO() {
 		return candidatoRepository.findAll();
 	}
 }

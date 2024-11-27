@@ -2,6 +2,7 @@ package br.com.hrapp.hrapp.controller;
 
 import java.util.List;
 
+import br.com.hrapp.hrapp.DTO.VagaDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,11 @@ public class VagaController {
 
     // CADASTRAR VAGA 
     @PostMapping("/cadastrar")
-    @Operation(
-            summary = ("Cadastro de Vagas"),
-            description = ("Cadastro das vagas disponíveis pelo RH"),
-            tags={"Vaga"}
-    )
-    public Vaga cadastraVaga(@RequestBody Vaga vaga) {
-        return vagaService.cadastraVaga(vaga);
+    @Operation(summary = "Cadastrar vaga", description = "Cadastrar uma nova vaga")
+    public VagaDTO cadastrarVaga(@RequestBody VagaDTO vagaDTO) {
+        Vaga vaga = vagaService.converterParaEntidade(vagaDTO);
+        Vaga vagaSalva = vagaService.cadastraVaga(vaga);
+        return vagaService.converterParaDTO(vagaSalva);
     }
 
     // BUSCAR VAGA POR TÍTULO
@@ -54,13 +53,9 @@ public class VagaController {
     
     //BUSCAR TODAS AS VAGAS
     @GetMapping("/todas")
-    @Operation(
-            summary = ("Busca de Todas as Vagas"),
-            description = ("Busca de Todas as Vagas"),
-            tags={"Vaga"}
-    )
-    public List<Vaga> buscarTodasVagas(){
-    	return vagaService.buscarTodasVagas();
+    @Operation(summary = "Buscar todas as vagas", description = "Buscar todas as vagas disponíveis")
+    public List<VagaDTO> buscarTodasVagas() {
+        return vagaService.buscarTodasVagasDTO();
     }
 
     // ATUALIZAR VAGA

@@ -1,8 +1,8 @@
 package br.com.hrapp.hrapp.controller;
 
-import br.com.hrapp.hrapp.models.AuthResponseDTO;
-import br.com.hrapp.hrapp.models.AutheticationDTO;
-import br.com.hrapp.hrapp.models.RegistroDTO;
+import br.com.hrapp.hrapp.DTO.AuthResponseDTO;
+import br.com.hrapp.hrapp.DTO.AutheticationDTO;
+import br.com.hrapp.hrapp.DTO.RegistroDTO;
 import br.com.hrapp.hrapp.models.User;
 import br.com.hrapp.hrapp.repository.UserRepository;
 import br.com.hrapp.hrapp.service.TokenService;

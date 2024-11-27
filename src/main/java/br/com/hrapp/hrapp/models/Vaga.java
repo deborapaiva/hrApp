@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "Vaga")
 @AllArgsConstructor // Construtor com argumentos
 @Data
+@Builder
 public class Vaga {
 
 	@Id
@@ -26,7 +28,6 @@ public class Vaga {
 	@NotNull
 	private String titulo;
 
-	@NotNull
 	private BigDecimal salario;
 
 	@NotNull
